@@ -2,20 +2,45 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Book;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class DefaultController extends Controller
 {
     /**
-     * @Route("/", name="homepage")
+     * @Route("/", name="add_book")
      */
-    public function indexAction(Request $request)
+    public function newAction(Request $request)
     {
-        // replace this example code with whatever you need
-        return $this->render('default/index.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
-        ]);
+        $book= new Book();
+
+        $form = $this-> createFormBuilder($book)
+            ->add('name', TextType::class)
+            ->add('title', TextType::class)
+            ->add('save', SubmitType::class, array('label' => 'Save'))
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $book = $form->getData();
+
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($book);
+            $em->flush();
+        }
+
+
+        return $this->render('AppBundle:Default:index.html.twig' , array(
+            'form' => $form->createView(),
+        ));
+
+
     }
 }
