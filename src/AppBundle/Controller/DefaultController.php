@@ -6,8 +6,8 @@ use AppBundle\Entity\Book;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use AppBundle\Form\BookType;
+
 
 class DefaultController extends Controller
 {
@@ -18,18 +18,11 @@ class DefaultController extends Controller
     {
         $book= new Book();
 
-        $form = $this-> createFormBuilder($book)
-            ->add('name', TextType::class)
-            ->add('title', TextType::class)
-            ->add('save', SubmitType::class, array('label' => 'Save'))
-            ->getForm();
+        $form = $this-> createForm(BookType::class , $book);
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            $book = $form->getData();
-
+        if ( $form->isSubmitted() ) {
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($book);
