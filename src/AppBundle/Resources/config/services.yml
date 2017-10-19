@@ -1,4 +1,4 @@
 services:
-#    user.example:
-#        class: UserBundle\Example
-#        arguments: ["@service_id", "plain_value", "%parameter%"]
+    app.bookhandler:
+        class: AppBundle\Model\Handler\BookHandler
+        arguments: ["@doctrine.orm.default_entity_manager"]

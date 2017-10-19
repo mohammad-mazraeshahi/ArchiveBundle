@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Form\BookType;
+use AppBundle\Model\Handler\BookHandler;
 
 
 class DefaultController extends Controller
@@ -23,10 +24,8 @@ class DefaultController extends Controller
         $form->handleRequest($request);
 
         if ( $form->isSubmitted() ) {
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($book);
-            $em->flush();
+            $bookSave= $this->get(BookHandler::class);
+            $bookSave->saveBook($book);
         }
 
 
