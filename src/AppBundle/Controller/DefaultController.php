@@ -2,33 +2,66 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Book;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Form\BookType;
-use AppBundle\Model\Handler\BookHandler;
+use AppBundle\Entity\Document;
+use AppBundle\Entity\DocumentAttachment;
+use AppBundle\Form\DocumentType;
+use AppBundle\Form\DocumentAttachmentType;
+use AppBundle\Model\Handler\DocumentHandler;
+use AppBundle\Service\FileUploader;
 
 
 class DefaultController extends Controller
 {
     /**
-     * @Route("/", name="add_book")
+     * @Route("/", name="add_document")
      */
     public function newAction(Request $request)
     {
-        $book= new Book();
+        $document= new Document();
 
-        $form = $this-> createForm(BookType::class , $book);
-
+        $form = $this-> createForm(DocumentType::class , $document);
         $form->handleRequest($request);
 
         if ( $form->isSubmitted() ) {
-            $bookSave= $this->get(BookHandler::class);
-            $bookSave->saveBook($book);
+            $documentSave= $this->get(DocumentHandler::class);
+            $documentSave->saveDocument($document);
         }
 
 
+        return $this->render('AppBundle:Default:index.html.twig' , array(
+            'form' => $form->createView(),
+        ));
+
+    }
+
+    /**
+     * @Route("/attach", name="add_document_attach")
+     *
+     */
+    public function uploadAction(Request $request , FileUploader $fileUploader)
+    {
+        $attach = new DocumentAttachment();
+
+        $form = $this->createForm(DocumentAttachmentType::class, $attach);
+        $form->handleRequest($request);
+
+
+        if ( $form->isSubmitted() ) {
+
+            $file = $attach->getFile();
+
+            $file = $fileUploader->upload($file);
+
+            $attach->setFile($file);
+            $attach->setPath($file);
+            $attach->setType($file->getExtension());
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($attach);
+            $em->flush();
+        }
         return $this->render('AppBundle:Default:index.html.twig' , array(
             'form' => $form->createView(),
         ));

@@ -2,3 +2,4 @@ services:
     app.bookhandler:
         class: AppBundle\Model\Handler\BookHandler
         arguments: ["@doctrine.orm.default_entity_manager"]
+
