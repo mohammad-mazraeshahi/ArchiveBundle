@@ -19,8 +19,8 @@ class DocumentAttachment
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * Many Attachments have One Document.
-     * @ORM\ManyToOne(targetEntity="Document", inversedBy="attachmentId")
-     * @ORM\JoinColumn(name="idAttachment", referencedColumnName="attachmentId")
+     * @ORM\ManyToOne(targetEntity="Document", inversedBy="attachments")
+     * @ORM\JoinColumn(name="idAttachment", referencedColumnName="attachments")
      */
 
     private $idAttachment;

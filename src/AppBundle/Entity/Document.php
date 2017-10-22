@@ -35,12 +35,9 @@ class Document
      */
     private $createDate;
     /**
-     * @ORM\Column(type="integer",nullable=true)
-     *
-     * One Document has Many Attachments.
      * @ORM\OneToMany(targetEntity="DocumentAttachment", mappedBy="idAttachment")
      */
-    private $attachmentId;
+    private $attachments;
 
 
     /**
@@ -151,13 +148,13 @@ class Document
     /**
      * Set attachmentId
      *
-     * @param integer $attachmentId
+     * @param integer $attachments
      *
      * @return Document
      */
-    public function setAttachmentId($attachmentId)
+    public function setAttachments($attachments)
     {
-        $this->attachmentId = $attachmentId;
+        $this->attachments = $attachments;
 
         return $this;
     }
@@ -167,8 +164,39 @@ class Document
      *
      * @return integer
      */
-    public function getAttachmentId()
+    public function getAttachments()
     {
-        return $this->attachmentId;
+        return $this->attachments;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->attachments = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add attachmentId
+     *
+     * @param \AppBundle\Entity\DocumentAttachment $attachmentId
+     *
+     * @return Document
+     */
+    public function addAttachmentId(\AppBundle\Entity\DocumentAttachment $attachmentId)
+    {
+        $this->attachments[] = $attachmentId;
+
+        return $this;
+    }
+
+    /**
+     * Remove attachmentId
+     *
+     * @param \AppBundle\Entity\DocumentAttachment $attachmentId
+     */
+    public function removeAttachmentId(\AppBundle\Entity\DocumentAttachment $attachmentId)
+    {
+        $this->attachments->removeElement($attachmentId);
     }
 }
