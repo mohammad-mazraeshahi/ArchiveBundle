@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use AppBundle\Entity\DocumentAttachment;
 
 
 /**
@@ -35,7 +36,8 @@ class Document
      */
     private $createDate;
     /**
-     * @ORM\OneToMany(targetEntity="DocumentAttachment", mappedBy="idAttachment")
+     * @ORM\Column(nullable=true)
+     * @ORM\OneToMany(targetEntity="DocumentAttachment", mappedBy="document" , cascade={"persist"})
      */
     private $attachments;
 
@@ -148,13 +150,13 @@ class Document
     /**
      * Set attachmentId
      *
-     * @param integer $attachments
+     * @param DocumentAttachment $attachments
      *
      * @return Document
      */
-    public function setAttachments($attachments)
+    public function addAttachments(DocumentAttachment $attachments)
     {
-        $this->attachments = $attachments;
+        $this->attachments->add($attachments);
 
         return $this;
     }

@@ -52,9 +52,7 @@ class DefaultController extends Controller
         if ( $form->isSubmitted() ) {
 
             $file = $attach->getFile();
-
             $file = $fileUploader->upload($file);
-
             $attach->setFile($file);
             $attach->setPath($file);
             $attach->setType($file->getExtension());

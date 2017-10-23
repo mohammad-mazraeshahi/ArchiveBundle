@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use AppBundle\Service\FileUploader;
 
 /**
  * @ORM\Entity
@@ -18,12 +19,16 @@ class DocumentAttachment
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * Many Attachments have One Document.
+     */
+    private $id;
+
+     /**
+     *
      * @ORM\ManyToOne(targetEntity="Document", inversedBy="attachments")
-     * @ORM\JoinColumn(name="idAttachment", referencedColumnName="attachments")
+     * @ORM\JoinColumn(name="attachments_id")
      */
 
-    private $idAttachment;
+    private $document;
 
     /**
      * @ORM\Column(type="string",length=255)
@@ -48,13 +53,13 @@ class DocumentAttachment
 
 
     /**
-     * Get idAttachment
+     * Get id
      *
      * @return integer
      */
-    public function getIdAttachment()
+    public function getId()
     {
-        return $this->idAttachment;
+        return $this->id;
     }
 
     /**
@@ -112,9 +117,10 @@ class DocumentAttachment
      *
      * @return DocumentAttachment
      */
-    public function setFile(UploadedFile $file = null)
+    public function setFile(UploadedFile $uploadedFile )
     {
-        $this->file = $file;
+        $file= new FileUploader();
+        $this->file = $file->upload($uploadedFile);
 
         return $this;
     }
@@ -122,7 +128,7 @@ class DocumentAttachment
     /**
      * Get file
      *
-     * @return UploadedFile
+     * @return string
      */
     public function getFile()
     {
@@ -151,5 +157,53 @@ class DocumentAttachment
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * Set attachment
+     *
+     * @param \AppBundle\Entity\Document $attachment
+     *
+     * @return DocumentAttachment
+     */
+    public function setAttachment(\AppBundle\Entity\Document $attachment = null)
+    {
+        $this->attachment = $attachment;
+
+        return $this;
+    }
+
+    /**
+     * Get attachment
+     *
+     * @return \AppBundle\Entity\Document
+     */
+    public function getAttachment()
+    {
+        return $this->attachment;
+    }
+
+    /**
+     * Set document
+     *
+     * @param \AppBundle\Entity\Document $document
+     *
+     * @return DocumentAttachment
+     */
+    public function setDocument(\AppBundle\Entity\Document $document = null)
+    {
+        $this->document = $document;
+
+        return $this;
+    }
+
+    /**
+     * Get document
+     *
+     * @return \AppBundle\Entity\Document
+     */
+    public function getDocument()
+    {
+        return $this->document;
     }
 }
