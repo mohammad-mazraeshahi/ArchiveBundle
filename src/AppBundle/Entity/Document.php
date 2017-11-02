@@ -2,10 +2,10 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use AppBundle\Entity\DocumentAttachment;
-
 
 /**
  * @ORM\Entity
@@ -19,33 +19,42 @@ class Document
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
     /**
      * @ORM\Column(type="string",length=20)
      */
     private $name;
+
     /**
-     * @ORM\Column(type="string",length=255,nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $description;
+
     /**
-     * @ORM\Column(type="string",length=50,nullable=true)
+     * @ORM\Column(type="string", length=50, nullable=true)
      */
     private $creator;
+
     /**
-     * @ORM\Column(type="datetime",nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      */
-    private $createDate;
+    private $createdAt;
+
     /**
-     * @ORM\Column(nullable=true)
-     * @ORM\OneToMany(targetEntity="DocumentAttachment", mappedBy="document" , cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="DocumentAttachment", mappedBy="document" , cascade={"persist", "remove"})
      */
     private $attachments;
 
+    /**
+     * Document constructor.
+     */
+    public function __construct()
+    {
+        $this->attachments = new ArrayCollection();
+    }
 
     /**
-     * Get id
-     *
-     * @return integer
+     * @return mixed
      */
     public function getId()
     {
@@ -53,23 +62,15 @@ class Document
     }
 
     /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Document
+     * @param mixed $id
      */
-    public function setName($name)
+    public function setId($id)
     {
-        $this->name = $name;
-
-        return $this;
+        $this->id = $id;
     }
 
     /**
-     * Get name
-     *
-     * @return string
+     * @return mixed
      */
     public function getName()
     {
@@ -77,23 +78,15 @@ class Document
     }
 
     /**
-     * Set description
-     *
-     * @param string $description
-     *
-     * @return Document
+     * @param mixed $name
      */
-    public function setDescription($description)
+    public function setName($name)
     {
-        $this->description = $description;
-
-        return $this;
+        $this->name = $name;
     }
 
     /**
-     * Get description
-     *
-     * @return string
+     * @return mixed
      */
     public function getDescription()
     {
@@ -101,23 +94,15 @@ class Document
     }
 
     /**
-     * Set creator
-     *
-     * @param string $creator
-     *
-     * @return Document
+     * @param mixed $description
      */
-    public function setCreator($creator)
+    public function setDescription($description)
     {
-        $this->creator = $creator;
-
-        return $this;
+        $this->description = $description;
     }
 
     /**
-     * Get creator
-     *
-     * @return string
+     * @return mixed
      */
     public function getCreator()
     {
@@ -125,80 +110,48 @@ class Document
     }
 
     /**
-     * Set createDate
-     *
-     * @param \DateTime $createDate
-     *
-     * @return Document
+     * @param mixed $creator
      */
-    public function setCreateDate($createDate)
+    public function setCreator($creator)
     {
-        $this->createDate = $createDate;
-        return $this;
+        $this->creator = $creator;
     }
 
     /**
-     * Get createDate
-     *
-     * @return \DateTime
+     * @return mixed
      */
-    public function getCreateDate()
+    public function getCreatedAt()
     {
-        return $this->createDate;
+        return $this->createdAt;
     }
 
     /**
-     * Set attachmentId
-     *
-     * @param DocumentAttachment $attachments
-     *
-     * @return Document
+     * @param mixed $createdAt
      */
-    public function addAttachments(DocumentAttachment $attachments)
+    public function setCreatedAt($createdAt)
     {
-        $this->attachments->add($attachments);
-
-        return $this;
+        $this->createdAt = $createdAt;
     }
 
     /**
-     * Get attachmentId
-     *
-     * @return integer
+     * @return mixed
      */
     public function getAttachments()
     {
         return $this->attachments;
     }
+
     /**
-     * Constructor
+     * @param DocumentAttachment $attachment
      */
-    public function __construct()
+    public function addAttachments(DocumentAttachment $attachment)
     {
-        $this->attachments = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->attachments->add($attachment);
+        $attachment->setDocument($this);
     }
 
-    /**
-     * Add attachmentId
-     *
-     * @param \AppBundle\Entity\DocumentAttachment $attachmentId
-     *
-     * @return Document
-     */
-    public function addAttachmentId(\AppBundle\Entity\DocumentAttachment $attachmentId)
+    public function removeAttachment(DocumentAttachment $attachment)
     {
-        $this->attachments[] = $attachmentId;
-
-        return $this;
-    }
-
-    /**
-     * Remove attachmentId
-     *
-     * @param \AppBundle\Entity\DocumentAttachment $attachmentId
-     */
-    public function removeAttachmentId(\AppBundle\Entity\DocumentAttachment $attachmentId)
-    {
-        $this->attachments->removeElement($attachmentId);
+        $this->attachments->removeElement($attachment);
     }
 }

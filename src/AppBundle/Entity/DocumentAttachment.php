@@ -10,7 +10,7 @@ use AppBundle\Service\FileUploader;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="attachment")
+ * @ORM\Table(name="document_attachment")
  */
 class DocumentAttachment
 {
@@ -18,44 +18,37 @@ class DocumentAttachment
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     *
      */
     private $id;
 
-     /**
-     *
-     * @ORM\ManyToOne(targetEntity="Document", inversedBy="attachments")
-     * @ORM\JoinColumn(name="attachments_id")
-     */
-
-    private $document;
-
     /**
-     * @ORM\Column(type="string",length=255)
+     * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
-     * @ORM\Column(type="string",length=255 ,nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $path;
 
     /**
-     * @ORM\Column(type="string",length=255 ,nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\File(maxSize="6000000")
      */
     private $file;
 
     /**
-     * @ORM\Column(type="string",length=20 ,nullable=true)
+     * @ORM\Column(type="string", length=20, nullable=true)
      */
     private $type;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Document", inversedBy="attachments")
+     */
+    private $document;
 
     /**
-     * Get id
-     *
-     * @return integer
+     * @return mixed
      */
     public function getId()
     {
@@ -63,23 +56,7 @@ class DocumentAttachment
     }
 
     /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return DocumentAttachment
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
+     * @return mixed
      */
     public function getName()
     {
@@ -87,23 +64,15 @@ class DocumentAttachment
     }
 
     /**
-     * Set path
-     *
-     * @param string $path
-     *
-     * @return DocumentAttachment
+     * @param mixed $name
      */
-    public function setPath($path)
+    public function setName($name)
     {
-        $this->path = $path;
-
-        return $this;
+        $this->name = $name;
     }
 
     /**
-     * Get path
-     *
-     * @return string
+     * @return mixed
      */
     public function getPath()
     {
@@ -111,24 +80,15 @@ class DocumentAttachment
     }
 
     /**
-     * Set file
-     *
-     * @param UploadedFile $file
-     *
-     * @return DocumentAttachment
+     * @param mixed $path
      */
-    public function setFile(UploadedFile $uploadedFile )
+    public function setPath($path)
     {
-        $file= new FileUploader();
-        $this->file = $file->upload($uploadedFile);
-
-        return $this;
+        $this->path = $path;
     }
 
     /**
-     * Get file
-     *
-     * @return string
+     * @return mixed
      */
     public function getFile()
     {
@@ -136,23 +96,15 @@ class DocumentAttachment
     }
 
     /**
-     * Set type
-     *
-     * @param string $type
-     *
-     * @return DocumentAttachment
+     * @param mixed $file
      */
-    public function setType($type)
+    public function setFile($file)
     {
-        $this->type = $type;
-
-        return $this;
+        $this->file = $file;
     }
 
     /**
-     * Get type
-     *
-     * @return string
+     * @return mixed
      */
     public function getType()
     {
@@ -160,50 +112,27 @@ class DocumentAttachment
     }
 
     /**
-     * Set attachment
-     *
-     * @param \AppBundle\Entity\Document $attachment
-     *
-     * @return DocumentAttachment
+     * @param mixed $type
      */
-    public function setAttachment(\AppBundle\Entity\Document $attachment = null)
+    public function setType($type)
     {
-        $this->attachment = $attachment;
-
-        return $this;
+        $this->type = $type;
     }
 
     /**
-     * Get attachment
-     *
-     * @return \AppBundle\Entity\Document
-     */
-    public function getAttachment()
-    {
-        return $this->attachment;
-    }
-
-    /**
-     * Set document
-     *
-     * @param \AppBundle\Entity\Document $document
-     *
-     * @return DocumentAttachment
-     */
-    public function setDocument(\AppBundle\Entity\Document $document = null)
-    {
-        $this->document = $document;
-
-        return $this;
-    }
-
-    /**
-     * Get document
-     *
-     * @return \AppBundle\Entity\Document
+     * @return Document
      */
     public function getDocument()
     {
         return $this->document;
     }
+
+    /**
+     * @param Document $document
+     */
+    public function setDocument(Document $document)
+    {
+        $this->document = $document;
+    }
+
 }
