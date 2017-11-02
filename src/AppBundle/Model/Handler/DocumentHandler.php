@@ -2,10 +2,10 @@
 
  namespace AppBundle\Model\Handler;
 
- use AppBundle\Entity\Book;
+ use AppBundle\Entity\Document;
  use Doctrine\ORM\EntityManager;
 
- class BookHandler
+ class DocumentHandler
  {
 
      private $em;
@@ -14,9 +14,9 @@
      {
          $this->em = $entityManager;
      }
-     public function saveBook(Book $book){
+     public function saveBook(Document $document){
 
-        $this->em->persist($book);
+        $this->em->persist($document);
         $this->em->flush();
 
      }
