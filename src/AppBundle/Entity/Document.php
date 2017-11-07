@@ -148,7 +148,7 @@ class Document
 
     /**
      * Set createdAt
-     *
+     * @ORM\PrePersist()
      * @return Document
      */
     public function setCreatedAt()
@@ -180,7 +180,7 @@ class Document
 
     /**
      * Get updatedAt
-     *
+     * @ORM\PreUpdate()
      * @return \DateTime
      */
     public function getUpdatedAt()
@@ -197,9 +197,8 @@ class Document
      */
     public function addAttachment(\AppBundle\Entity\Attachment $attachment)
     {
-        $this->attachments[] = $attachment;
-
-        return $this;
+        $this->attachments->add($attachment);
+        $attachment->setDocument($this);
     }
 
     /**

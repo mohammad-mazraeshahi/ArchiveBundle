@@ -19,9 +19,9 @@ class DocumentType extends AbstractType
             ->add('title', TextType::class)
             ->add('description', TextareaType::class)
             ->add('attachments', CollectionType::class, array(
-                 'entry_type' => AttachmentType::class,
-                 'entry_options' => array('label' => false),
-             ))
+                'entry_type' => AttachmentType::class,
+                'entry_options' => array('label' => false),
+            ))
         ;
 
 
